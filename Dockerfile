@@ -8,6 +8,6 @@ RUN apk update && \
 	tar -xzf dynamodb_local_latest.tar.gz && \
 	rm dynamodb_local_latest.tar.gz && \
 	apk del curl tar
-
-ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "dynamodb/DynamoDBLocal.jar", "-sharedDb"]
+WORKDIR	dynamodb
+ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
 CMD ["-port", "8000"]
