@@ -1,19 +1,18 @@
 FROM openjdk:8-jre-alpine
 
-# expose default port
+WORKDIR /var/dynamodb_wd
 EXPOSE 8000
 
 # setup dynamo
 RUN apk update && \
 	apk add curl tar && \
-	mkdir -p dynamodb && \
-	cd dynamodb && \
 	curl -LO http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz && \
 	tar -xzf dynamodb_local_latest.tar.gz && \
 	rm dynamodb_local_latest.tar.gz && \
 	apk del curl tar
 
-WORKDIR	dynamodb
-
-ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
+ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/var/dynamodb_local"]
 CMD ["-port", "8000"]
+
+# Add VOLUMEs to allow backup of config, logs and databases
+VOLUME ["/var/dynamodb_local", "/var/dynamodb_wd"]
