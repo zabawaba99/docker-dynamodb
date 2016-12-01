@@ -1,15 +1,12 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre
 
 WORKDIR /var/dynamodb_wd
 EXPOSE 8000
 
 # setup dynamo
-RUN apk update && \
-	apk add curl tar && \
-	curl -LO http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz && \
+RUN curl -LO http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz && \
 	tar -xzf dynamodb_local_latest.tar.gz && \
-	rm dynamodb_local_latest.tar.gz && \
-	apk del curl tar
+	rm dynamodb_local_latest.tar.gz
 
 ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/var/dynamodb_local"]
 CMD ["-port", "8000"]
