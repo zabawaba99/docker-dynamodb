@@ -8,8 +8,7 @@ RUN curl -LO http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_l
 	tar -xzf dynamodb_local_latest.tar.gz && \
 	rm dynamodb_local_latest.tar.gz
 
-ENTRYPOINT ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/var/dynamodb_local"]
-CMD ["-port", "8000"]
+CMD ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/var/dynamodb_local", "-port", "8000"]
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME ["/var/dynamodb_local", "/var/dynamodb_wd"]
